@@ -6,9 +6,9 @@ namespace GameProject
     {
         public static void Main()
         {
-            const int Attemps = 3, Op0 = 0, Op1 = 1, Op4 = 4;
+          const int Attemps = 3, Op0 = 0, Op1 = 1, Op4 = 4;
             int[] option = new int[2];
-            int i = 0;
+            int i;
 
             do
             {

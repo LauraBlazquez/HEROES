@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
@@ -10,6 +9,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilsLibrary", "..\UtilsLibrary\UtilsLibrary.csproj", "{4250EE0B-6909-4BE3-8AD1-7DF74C0B812D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HEROES_Tests", "..\HEROES_Tests\HEROES_Tests.csproj", "{1B6EE2A9-154A-4601-8CA7-1E60B070D153}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilsLibrary", "..\UtilsLibrary\UtilsLibrary.csproj", "{87BA33DA-CB11-473A-B258-4E3462A0CA94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messages", "..\Messages\Messages.csproj", "{D815091C-E2AE-44DB-9B75-2854B8C0878C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HEROES_Tests", "..\HEROES_Tests\HEROES_Tests.csproj", "{A32BFA39-4DAF-48CC-BA3B-41E62441DB37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
