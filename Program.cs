@@ -6,10 +6,11 @@ namespace GameProject
     {
         public static void Main()
         {
-          const int Attemps = 3, Op0 = 0, Op1 = 1, Op4 = 4;
+            const int Attemps = 3, Op0 = 0, Op1 = 1, Op4 = 4;
             int[] option = new int[2];
             int i;
-
+            string names;
+            string[] separatedNames = new string[4];
             do
             {
                 i = 0;
@@ -35,6 +36,16 @@ namespace GameProject
                         if (!Utils.InRangValidation(option[1], Op1, Op4) && i < Attemps)
                             Console.WriteLine(Consts.MsgErrorOption);
                     } while (!Utils.InRangValidation(option[1], Op1, Op4) && i < Attemps);
+                    Console.Clear();
+                    Console.WriteLine(Consts.NamesMsg);
+                    do
+                    {
+                        names = Console.ReadLine();
+                        separatedNames = names.Split(',');
+                        if (Utils.ValidNames(separatedNames)) Console.WriteLine(Consts.NamesError);
+                    } while (Utils.ValidNames(separatedNames));
+                    Console.WriteLine(Consts.Begin);
+
                     switch (option[1])
                     {
                         case 1:
