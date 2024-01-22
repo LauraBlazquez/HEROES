@@ -45,7 +45,6 @@ namespace GameProject
                         separatedNames = names.Split(',');
                         if (Utils.ValidNames(separatedNames)) Console.WriteLine(Consts.NamesError);
                     } while (Utils.ValidNames(separatedNames));
-                    Console.WriteLine(Consts.Begin);
 
                     switch (option[1])
                     {
