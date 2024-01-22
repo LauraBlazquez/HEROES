@@ -11,7 +11,6 @@ namespace GameProject
             int i;
             string names;
             string[] separatedNames = new string[4];
-
             do
             {
                 i = 0;
