@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Messages\Constants.csproj" />
+    <ProjectReference Include="..\UtilsLibrary\UtilsLibrary.csproj" />
+  </ItemGroup>
+
 </Project>
