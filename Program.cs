@@ -442,7 +442,134 @@ namespace GameProject
                                 Console.WriteLine(Messages.Defeat);
                             break;
                         case 4:
+                            int[] randomTurns = new int[separatedNames.Length];
+                            int[,] randomStats = { { Values.Archer, 0, 0, 0, Values.Cooldown },
+                       { Values.Barbarian, 0, 0, 0, Values.Cooldown },
+                       { Values.Magician, 0, 0, 0, Values.Cooldown },
+                       { Values.Druid, 0, 0, 0, Values.Cooldown } };
+                            int[] randomMonsterStats = { 0, 0, 0, Values.KnockOut };
+                            //for (int i = 0; i < separatedNames.Length; i++)
+                            //{
+                            //    for (int j = 1; j < separatedNames.Length; j++)
+                            //    {
+                            //        do
+                            //        {
+                            //            userStats[i, j] = Convert.ToInt32(Console.ReadLine());
+                            //            tries++;
+                            //            if (!Utils.InRangValidation(userStats[i, j], Values.Op1, Values.Op4) && tries < Values.Attemps)
+                            //                Console.WriteLine(Messages.MsgErrorOption);
+                            //        } while (!Utils.InRangValidation(option[1], Values.Op1, Values.Op4) && tries < Values.Attemps);
+                            //    }
+                            //} Tendria que hacer la comprobación con los valores límite, pero teniendo la matriz de variables tengo que ir una por una, no encuntra la forma de refactorizar.
+                            do
+                            {
+                                Utils.PrintRound(separatedNames, randomStats, randomMonsterStats);
+                                Utils.TurnsOrder(randomTurns);
 
+                                int action;
+                                for (int i = 0; i < randomTurns.Length; i++)
+                                {
+                                    if (randomStats[randomTurns[i], Values.Health] > 0 && randomMonsterStats[0] > 0)
+                                    {
+                                        Console.WriteLine(Messages.Action, separatedNames[randomTurns[i]]);
+                                        tries = 0;
+                                        do
+                                        {
+                                            action = Convert.ToInt32(Console.ReadLine());
+                                            tries++;
+                                            if (!Utils.InRangValidation(action, Values.Op1, Values.Op3) && tries < Values.Attemps) Console.WriteLine(Messages.MsgErrorOption);
+                                            while (Utils.InRangValidation(randomStats[randomTurns[i], Values.Hability]) && action == Values.Op3 && tries < Values.Attemps)
+                                            {
+                                                Console.WriteLine(Messages.HabilityUn, randomStats[randomTurns[i], Values.Hability]);
+                                                tries++;
+                                                action = Convert.ToInt32(Console.ReadLine());
+                                            }
+                                        } while (!Utils.InRangValidation(action, Values.Op1, Values.Op3) && tries < Values.Attemps);
+
+                                        switch (action)
+                                        {
+                                            case 1:
+                                                randomMonsterStats[0] -= Utils.Attack(randomStats, randomMonsterStats, randomTurns[i]);
+                                                Console.WriteLine(Messages.MonsterDamage, separatedNames[randomTurns[i]], Utils.Attack(randomStats, randomMonsterStats, randomTurns[i]));
+                                                break;
+                                            case 2:
+                                                randomStats[randomTurns[i], Values.Shield] = Utils.ShieldImprovement(randomStats, randomTurns[i]);
+                                                Console.WriteLine(Messages.ShieldImprove, separatedNames[randomTurns[i]], randomStats[randomTurns[i], Values.Shield]);
+                                                break;
+                                            case 3:
+                                                if (Utils.InRangValidation(randomStats[randomTurns[i], Values.Hability]))
+                                                {
+                                                    switch (randomStats[randomTurns[i], 0])
+                                                    {
+                                                        case Values.Archer:
+                                                            randomStats[randomTurns[i], Values.Hability]--;
+                                                            break;
+                                                        case Values.Barbarian:
+                                                            if (randomStats[randomTurns[i], Values.Shield] != Values.MegaShield)
+                                                            {
+                                                                randomStats[randomTurns[i], Values.Shield] = Values.MegaShield;
+                                                                randomStats[randomTurns[i], Values.Hability]--;
+                                                            }
+                                                            break;
+                                                        case Values.Magician:
+                                                            randomMonsterStats[0] -= Values.Attemps * Utils.Attack(randomStats, randomMonsterStats, randomTurns[i]);
+                                                            break;
+                                                        case Values.Druid:
+                                                            for (int j = 0; j < randomStats.GetLength(0); i++)
+                                                            {
+                                                                switch (randomStats[j, 0])
+                                                                {
+                                                                    case 0:
+                                                                        randomStats[j, Values.Health] = Utils.Heal(randomStats[j, Values.Health], Values.ArcherHealthMax);
+                                                                        break;
+                                                                    case 1:
+                                                                        randomStats[j, Values.Health] = Utils.Heal(randomStats[j, Values.Health], Values.BarbarianHealthMax);
+                                                                        break;
+                                                                    case 2:
+                                                                        randomStats[j, Values.Health] = Utils.Heal(randomStats[j, Values.Health], Values.MagicianHealthMax);
+                                                                        break;
+                                                                    case 3:
+                                                                        randomStats[j, Values.Health] = Utils.Heal(randomStats[j, Values.Health], Values.DruidHealthMax);
+                                                                        break;
+                                                                }
+                                                            }
+                                                            break;
+                                                    }
+                                                    Console.WriteLine(Messages.UseHability, separatedNames[randomTurns[i]]);
+                                                }
+                                                else Console.WriteLine(Messages.ErrorBattleOption);
+                                                break;
+                                            default:
+                                                Console.WriteLine(Messages.ErrorBattleOption);
+                                                break;
+                                        }
+                                        Console.ReadKey();
+                                        Console.Clear();
+                                        Utils.PrintRound(separatedNames, randomStats, randomMonsterStats);
+                                    }
+                                }
+
+                                for (int i = 0; i < randomStats.GetLength(0); i++)
+                                {
+
+                                    randomStats[i, Values.Health] -= Utils.Attack(randomStats, randomMonsterStats[3], i);
+                                    Console.WriteLine(Messages.MonsterAction, separatedNames[randomStats[i, 0]], randomStats[i, Values.Health]);
+                                }
+
+
+                                for (int i = 0; i < randomStats.GetLength(0); i++)
+                                {
+                                    Utils.HabilitiesBalance(randomStats[i, Values.Hability], Values.Cooldown);
+                                }
+                                randomMonsterStats[3] = Utils.HabilitiesBalance(randomMonsterStats[3], Values.KnockOut);
+                            } while ((randomStats[Values.Archer, Values.Health] > 0 ||
+                                      randomStats[Values.Barbarian, Values.Health] > 0 ||
+                                      randomStats[Values.Magician, Values.Health] > 0 ||
+                                      randomStats[Values.Druid, Values.Health] > 0) && randomMonsterStats[0] > 0);
+                            if (randomMonsterStats[0] <= 0)
+                                Console.WriteLine(Messages.Win);
+                            else
+                                Console.WriteLine(Messages.Defeat);
                             break;
                     }
                 }
