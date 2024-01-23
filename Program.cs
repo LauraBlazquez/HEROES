@@ -70,9 +70,9 @@ namespace GameProject
                     {
                         case 1:
                             int[] easyTurns = new int[separatedNames.Length];
-                            int[,] easyStats = { { Values.Archer, Values.ArcherHealthMax, Values.ArcherAttackMax, Values.ArcherShieldMax, Values.Cooldown }, 
-                                                 { Values.Barbarian, Values.BarbarianHealthMax, Values.BarbarianAttackMax, Values.BarbarianShieldMax, Values.Cooldown }, 
-                                                 { Values.Magician, Values.MagicianHealthMax, Values.MagicianAttackMax, Values.MagicianShieldMax, Values.Cooldown }, 
+                            int[,] easyStats = { { Values.Archer, Values.ArcherHealthMax, Values.ArcherAttackMax, Values.ArcherShieldMax, Values.Cooldown },
+                                                 { Values.Barbarian, Values.BarbarianHealthMax, Values.BarbarianAttackMax, Values.BarbarianShieldMax, Values.Cooldown },
+                                                 { Values.Magician, Values.MagicianHealthMax, Values.MagicianAttackMax, Values.MagicianShieldMax, Values.Cooldown },
                                                  { Values.Druid, Values.DruidHealthMax, Values.DruidAttackMax, Values.DruidShieldMax, Values.Cooldown } };
                             int[] easyMonsterStats = { Values.MonsterHealthMin, Values.MonsterAttackMin, Values.MonsterShieldMin, Values.KnockOut };
                             do
@@ -162,8 +162,7 @@ namespace GameProject
                                         Utils.PrintRound(separatedNames, easyStats, easyMonsterStats);
                                     }
                                 }
-
-                                if (easyStats[Values.Archer,Values.Hability] > Values.Cooldown-Values.KnockOut)
+                                if (easyStats[Values.Archer, Values.Hability] > Values.Cooldown - Values.KnockOut)
                                 {
                                     for (int i = 0; i < easyStats.GetLength(0); i++)
                                     {
@@ -178,26 +177,145 @@ namespace GameProject
 
                                 for (int i = 0; i < easyStats.GetLength(0); i++)
                                 {
-                                    Utils.HabilitiesBalance(easyStats[i,Values.Hability],Values.Cooldown);
+                                    Utils.HabilitiesBalance(easyStats[i, Values.Hability], Values.Cooldown);
                                 }
-                                easyMonsterStats[3] = Utils.HabilitiesBalance(easyMonsterStats[3],Values.KnockOut);
+                                easyMonsterStats[3] = Utils.HabilitiesBalance(easyMonsterStats[3], Values.KnockOut);
                             } while ((easyStats[Values.Archer, Values.Health] > 0 ||
                                       easyStats[Values.Barbarian, Values.Health] > 0 ||
                                       easyStats[Values.Magician, Values.Health] > 0 ||
                                       easyStats[Values.Druid, Values.Health] > 0) && easyMonsterStats[0] > 0);
                             if (easyMonsterStats[0] <= 0)
-                                    Console.WriteLine(Messages.Win);
+                                Console.WriteLine(Messages.Win);
                             else
                                 Console.WriteLine(Messages.Defeat);
                             break;
                         case 2:
-                            
+                            int[] hardTurns = new int[separatedNames.Length];
+                            int[,] hardStats = { { Values.Archer, Values.ArcherHealthMin, Values.ArcherAttackMin, Values.ArcherShieldMin, Values.Cooldown },
+                     { Values.Barbarian, Values.BarbarianHealthMin, Values.BarbarianAttackMin, Values.BarbarianShieldMin, Values.Cooldown },
+                     { Values.Magician, Values.MagicianHealthMin, Values.MagicianAttackMin, Values.MagicianShieldMin, Values.Cooldown },
+                     { Values.Druid, Values.DruidHealthMin, Values.DruidAttackMin, Values.DruidShieldMin, Values.Cooldown } };
+                            int[] hardMonsterStats = { Values.MonsterHealthMax, Values.MonsterAttackMax, Values.MonsterShieldMax, Values.KnockOut };
+                            do
+                            {
+                                Utils.PrintRound(separatedNames, hardStats, hardMonsterStats);
+                                Utils.TurnsOrder(hardTurns);
+
+                                int action;
+                                for (int i = 0; i < hardTurns.Length; i++)
+                                {
+                                    if (hardStats[hardTurns[i], Values.Health] > 0 && hardMonsterStats[0] > 0)
+                                    {
+                                        Console.WriteLine(Messages.Action, separatedNames[hardTurns[i]]);
+                                        tries = 0;
+                                        do
+                                        {
+                                            action = Convert.ToInt32(Console.ReadLine());
+                                            tries++;
+                                            if (!Utils.InRangValidation(action, Values.Op1, Values.Op3) && tries < Values.Attemps) Console.WriteLine(Messages.MsgErrorOption);
+                                            while (!Utils.InRangValidation(hardStats[hardTurns[i], Values.Hability]) && action == Values.Op3 && tries < Values.Attemps)
+                                            {
+                                                Console.WriteLine(Messages.HabilityUn, hardStats[hardTurns[i], Values.Hability]);
+                                                tries++;
+                                                action = Convert.ToInt32(Console.ReadLine());
+                                            }
+                                        } while (!Utils.InRangValidation(action, Values.Op1, Values.Op3) && tries < Values.Attemps);
+
+                                        switch (action)
+                                        {
+                                            case 1:
+                                                hardMonsterStats[0] -= Utils.Attack(hardStats, hardMonsterStats, hardTurns[i]);
+                                                Console.WriteLine(Messages.MonsterDamage, separatedNames[hardTurns[i]], Utils.Attack(hardStats, hardMonsterStats, hardTurns[i]));
+                                                break;
+                                            case 2:
+                                                hardStats[hardTurns[i], Values.Shield] = Utils.ShieldImprovement(hardStats, hardTurns[i]);
+                                                Console.WriteLine(Messages.ShieldImprove, separatedNames[hardTurns[i]], hardStats[hardTurns[i], Values.Shield]);
+                                                break;
+                                            case 3:
+                                                if (Utils.InRangValidation(hardStats[hardTurns[i], Values.Hability]))
+                                                {
+                                                    switch (hardStats[hardTurns[i], 0])
+                                                    {
+                                                        case Values.Archer:
+                                                            hardStats[hardTurns[i], Values.Hability]--;
+                                                            break;
+                                                        case Values.Barbarian:
+                                                            if (hardStats[hardTurns[i], Values.Shield] != Values.MegaShield)
+                                                            {
+                                                                hardStats[hardTurns[i], Values.Shield] = Values.MegaShield;
+                                                                hardStats[hardTurns[i], Values.Hability]--;
+                                                            }
+                                                            break;
+                                                        case Values.Magician:
+                                                            hardMonsterStats[0] -= Values.Attemps * Utils.Attack(hardStats, hardMonsterStats, hardTurns[i]);
+                                                            break;
+                                                        case Values.Druid:
+                                                            for (int j = 0; j < hardStats.GetLength(0); j++)
+                                                            {
+                                                                switch (hardStats[j, 0])
+                                                                {
+                                                                    case 0:
+                                                                        hardStats[j, Values.Health] = Utils.Heal(hardStats[j, Values.Health], Values.ArcherHealthMin);
+                                                                        break;
+                                                                    case 1:
+                                                                        hardStats[j, Values.Health] = Utils.Heal(hardStats[j, Values.Health], Values.BarbarianHealthMin);
+                                                                        break;
+                                                                    case 2:
+                                                                        hardStats[j, Values.Health] = Utils.Heal(hardStats[j, Values.Health], Values.MagicianHealthMin);
+                                                                        break;
+                                                                    case 3:
+                                                                        hardStats[j, Values.Health] = Utils.Heal(hardStats[j, Values.Health], Values.DruidHealthMin);
+                                                                        break;
+                                                                }
+                                                            }
+                                                            break;
+                                                    }
+                                                    Console.WriteLine(Messages.UseHability, separatedNames[hardTurns[i]]);
+                                                }
+                                                else Console.WriteLine(Messages.ErrorBattleOption);
+                                                break;
+                                            default:
+                                                Console.WriteLine(Messages.ErrorBattleOption);
+                                                break;
+                                        }
+                                        Console.ReadKey();
+                                        Console.Clear();
+                                        Utils.PrintRound(separatedNames, hardStats, hardMonsterStats);
+                                    }
+                                }
+                                if (hardStats[Values.Archer, Values.Hability] > Values.Cooldown - Values.KnockOut)
+                                {
+                                    for (int i = 0; i < hardStats.GetLength(0); i++)
+                                    {
+                                        hardStats[i, Values.Health] -= Utils.Attack(hardStats, hardMonsterStats[1], i);
+                                        Console.WriteLine(Messages.MonsterAction, separatedNames[hardStats[i, 0]], Utils.Attack(hardStats, hardMonsterStats[1], i));
+                                    }
+                                }
+                                else
+                                    Console.WriteLine(Messages.SleepyMonster);
+                                Console.ReadKey();
+                                Console.Clear();
+
+
+                                for (int i = 0; i < hardStats.GetLength(0); i++)
+                                {
+                                    Utils.HabilitiesBalance(hardStats[i, Values.Hability], Values.Cooldown);
+                                }
+                                hardMonsterStats[3] = Utils.HabilitiesBalance(hardMonsterStats[3], Values.KnockOut);
+                            } while ((hardStats[Values.Archer, Values.Health] > 0 ||
+                                      hardStats[Values.Barbarian, Values.Health] > 0 ||
+                                      hardStats[Values.Magician, Values.Health] > 0 ||
+                                      hardStats[Values.Druid, Values.Health] > 0) && hardMonsterStats[0] > 0);
+                            if (hardMonsterStats[0] <= 0)
+                                Console.WriteLine(Messages.Win);
+                            else
+                                Console.WriteLine(Messages.Defeat);
                             break;
                         case 3:
-                            
+
                             break;
                         case 4:
-                            
+
                             break;
                     }
                 }
