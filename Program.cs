@@ -1,5 +1,5 @@
 ﻿using UtilsLibrary;
-using Messages;
+using Constants;
 
 namespace GameProject
 {
@@ -7,7 +7,6 @@ namespace GameProject
     {
         public static void Main()
         {
-            const int Attemps = 3, Op0 = 0, Op1 = 1, Op4 = 4;
             int[] option = new int[2];
             int tries;
             string names, skip;
@@ -16,41 +15,41 @@ namespace GameProject
             {
                 tries = 0;
                 Console.Clear();
-                Console.WriteLine(Consts.Welcome);
-                Console.WriteLine(Consts.Menu);
+                Console.WriteLine(Messages.Welcome);
+                Console.WriteLine(Messages.Menu);
                 do
                 {
                     option[0] = Convert.ToInt32(Console.ReadLine());
                     tries++;
-                    if (!Utils.InRangValidation(option[0], Op0, Op1) && tries < Attemps)
-                        Console.WriteLine(Consts.MsgErrorOption);
-                } while (!Utils.InRangValidation(option[0], Op0, Op1) && tries < Attemps);
+                    if (!Utils.InRangValidation(option[0], Values.Op0, Values.Op1) && tries < Values.Attemps)
+                        Console.WriteLine(Messages.MsgErrorOption);
+                } while (!Utils.InRangValidation(option[0], Values.Op0, Values.Op1) && tries < Values.Attemps);
 
                 tries = 0;
-                if (option[0] == Op1)
+                if (option[0] == Values.Op1)
                 {
                     Console.Clear();
-                    Console.WriteLine(Consts.ChooseDificulty);
+                    Console.WriteLine(Messages.ChooseDificulty);
                     do
                     {
                         option[1] = Convert.ToInt32(Console.ReadLine());
                         tries++;
-                        if (!Utils.InRangValidation(option[1], Op1, Op4) && tries < Attemps)
-                            Console.WriteLine(Consts.MsgErrorOption);
-                    } while (!Utils.InRangValidation(option[1], Op1, Op4) && tries < Attemps);
+                        if (!Utils.InRangValidation(option[1], Values.Op1, Values.Op4) && tries < Values.Attemps)
+                            Console.WriteLine(Messages.MsgErrorOption);
+                    } while (!Utils.InRangValidation(option[1], Values.Op1, Values.Op4) && tries < Values.Attemps);
 
                     Console.Clear();
-                    Console.WriteLine(Consts.NamesMsg);
+                    Console.WriteLine(Messages.NamesMsg);
                     do
                     {
                         names = Console.ReadLine();
                         separatedNames = names.Split(',');
-                        if (Utils.ValidNames(separatedNames)) Console.WriteLine(Consts.NamesError);
+                        if (Utils.ValidNames(separatedNames)) Console.WriteLine(Messages.NamesError);
                     } while (Utils.ValidNames(separatedNames));
-                    Console.WriteLine(Consts.Begin);
+                    Console.WriteLine(Messages.Begin);
 
                     Console.Clear();
-                    Console.WriteLine(Consts.SkipTutorial);
+                    Console.WriteLine(Messages.SkipTutorial);
                     skip = Console.ReadLine();
                     switch (skip)
                     {
@@ -58,7 +57,7 @@ namespace GameProject
                         case "Y":
                             {
                                 Console.Clear();
-                                Console.WriteLine(Consts.Tutorial, separatedNames[0], separatedNames[1].Trim(), separatedNames[2].Trim(), separatedNames[3].Trim());
+                                Console.WriteLine(Messages.Tutorial, separatedNames[0], separatedNames[1].Trim(), separatedNames[2].Trim(), separatedNames[3].Trim());
                                 Console.ReadKey();
                                 Console.Clear();
                             }
@@ -74,7 +73,7 @@ namespace GameProject
                             int[] turns = new int[separatedNames.Length];
                             int[,] stats = { { 2000, 300, 35, 5 }, { 3750, 250, 45, 5 }, { 1500, 400, 35, 5 }, { 2500, 120, 40, 5 } };
                             int[] monsterStats = { 7000, 300, 20 };
-                            int archerHealth = stats[0, 0], barbarianHealth = stats[1, 0], magicianHealth = stats[2, 0], druidHealth = stats[3, 0];
+                            int[] maxHealths = { stats [0, 0], stats [1, 0], stats [2, 0], stats [3, 0] };
                             int barbarianShield = stats[1, 2];
                             do
                             {
@@ -98,12 +97,12 @@ namespace GameProject
                             break;
                     }
                 }
-            } while (option[0] == Op1 && Utils.InRangValidation(option[1], Op1, Op4));
-            if (option[0] == Op0) Console.WriteLine(Consts.Bye);
+            } while (option[0] == Values.Op1 && Utils.InRangValidation(option[1], Values.Op1, Values.Op4));
+            if (option[0] == Values.Op0) Console.WriteLine(Messages.Bye);
             else
             {
                 Console.Clear();
-                Console.WriteLine(Consts.MsgErrorMenu);
+                Console.WriteLine(Messages.MsgErrorMenu);
             }
         }
     }

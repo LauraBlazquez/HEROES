@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HEROES", "HEROES.csproj", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HEROES_Tests", "..\HEROES_Tests\HEROES_Tests.csproj", "{2C69A3F6-6B3C-4E89-86E2-23294D377B11}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages", "..\Messages\Messages.csproj", "{ABB0A7C6-B92A-49D8-A6D5-AD7D2EE99DA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Constants", "..\Messages\Constants.csproj", "{ABB0A7C6-B92A-49D8-A6D5-AD7D2EE99DA4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilsLibrary", "..\UtilsLibrary\UtilsLibrary.csproj", "{E6DA9776-468B-43F0-A9EE-B79B87326CF9}"
 EndProject
