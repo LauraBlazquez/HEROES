@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Messages\Messages.csproj" />
+    <ProjectReference Include="..\Messages\Constants.csproj" />
     <ProjectReference Include="..\UtilsLibrary\UtilsLibrary.csproj" />
   </ItemGroup>
 
