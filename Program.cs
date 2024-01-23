@@ -1,4 +1,4 @@
-﻿using UtilsLibrary;
+using UtilsLibrary;
 using Constants;
 namespace GameProject
 {
@@ -162,7 +162,6 @@ namespace GameProject
                                         Utils.PrintRound(separatedNames, easyStats, easyMonsterStats);
                                     }
                                 }
-
                                 if (easyStats[Values.Archer, Values.Hability] > Values.Cooldown - Values.KnockOut)
                                 {
                                     for (int i = 0; i < easyStats.GetLength(0); i++)
