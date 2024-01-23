@@ -1,6 +1,5 @@
-﻿using UtilsLibrary;
+using UtilsLibrary;
 using Constants;
-
 namespace GameProject
 {
     public class BlazquezLauraCode
@@ -212,4 +211,3 @@ namespace GameProject
         }
     }
 }
-
