@@ -71,21 +71,22 @@ namespace GameProject
                     {
                         case 1:
                             int[] turns = new int[separatedNames.Length];
-                            int[,] stats = { { 2000, 300, 35, 5 }, { 3750, 250, 45, 5 }, { 1500, 400, 35, 5 }, { 2500, 120, 40, 5 } };
-                            int[] monsterStats = { 7000, 300, 20 };
-                            int[] maxHealths = { stats [0, 0], stats [1, 0], stats [2, 0], stats [3, 0] };
-                            int barbarianShield = stats[1, 2];
+                            int[,] stats = { { Values.Archer, Values.ArcherHealthMax, Values.ArcherAttackMax, Values.ArcherShieldMax, Values.Cooldown }, 
+                                             { Values.Barbarian, Values.BarbarianHealthMax, Values.BarbarianAttackMax, Values.BarbarianShieldMax, Values.Cooldown }, 
+                                             { Values.Magician, Values.MagicianHealthMax, Values.MagicianAttackMax, Values.MagicianShieldMax, Values.Cooldown }, 
+                                             { Values.Druid, Values.DruidHealthMax, Values.DruidAttackMax, Values.MagicianShieldMax, Values.Cooldown } };
+                            int[] monsterStats = { Values.MonsterHealthMin, Values.MonsterAttackMin, Values.MonsterShieldMin };
                             do
                             {
                                 Utils.PrintRound(separatedNames, stats, monsterStats);
-                                Utils.TurnsOrder(ref turns);
+                                Utils.TurnsOrder(turns);
 
                                 for (int i = 0; i < turns.Length; i++)
                                 {
                                     Console.WriteLine(turns[i]);
                                 }
 
-                                //Utils.Round(turns, ref stats, separatedNames);
+                                //Utils.Round(turns, stats, separatedNames);
                             } while ((stats[0, 0] > 0 || stats[1, 0] > 0 || stats[2, 0] > 0 || stats[3, 0] > 0) && monsterStats[0] > 0);
 
                             break;
