@@ -312,7 +312,134 @@ namespace GameProject
                                 Console.WriteLine(Messages.Defeat);
                             break;
                         case 3:
+                            int[] userTurns = new int[separatedNames.Length];
+                            int[,] userStats = { { Values.Archer, 0, 0, 0, Values.Cooldown },
+                     { Values.Barbarian, 0, 0, 0, Values.Cooldown },
+                     { Values.Magician, 0, 0, 0, Values.Cooldown },
+                     { Values.Druid, 0, 0, 0, Values.Cooldown } };
+                            int[] userMonsterStats = { 0, 0, 0, Values.KnockOut };
+                            //for (int i = 0; i < separatedNames.Length; i++)
+                            //{
+                            //    for (int j = 1; j < separatedNames.Length; j++)
+                            //    {
+                            //        do
+                            //        {
+                            //            userStats[i, j] = Convert.ToInt32(Console.ReadLine());
+                            //            tries++;
+                            //            if (!Utils.InRangValidation(userStats[i, j], Values.Op1, Values.Op4) && tries < Values.Attemps)
+                            //                Console.WriteLine(Messages.MsgErrorOption);
+                            //        } while (!Utils.InRangValidation(option[1], Values.Op1, Values.Op4) && tries < Values.Attemps);
+                            //    }
+                            //} Tendria que hacer la comprobación con los valores límite, pero teniendo la matriz de variables tengo que ir una por una, no encuntra la forma de refactorizar.
+                            do
+                            {
+                                Utils.PrintRound(separatedNames, userStats, userMonsterStats);
+                                Utils.TurnsOrder(userTurns);
 
+                                int action;
+                                for (int i = 0; i < userTurns.Length; i++)
+                                {
+                                    if (userStats[userTurns[i], Values.Health] > 0 && userMonsterStats[0] > 0)
+                                    {
+                                        Console.WriteLine(Messages.Action, separatedNames[userTurns[i]]);
+                                        tries = 0;
+                                        do
+                                        {
+                                            action = Convert.ToInt32(Console.ReadLine());
+                                            tries++;
+                                            if (!Utils.InRangValidation(action, Values.Op1, Values.Op3) && tries < Values.Attemps) Console.WriteLine(Messages.MsgErrorOption);
+                                            while (Utils.InRangValidation(userStats[userTurns[i], Values.Hability]) && action == Values.Op3 && tries < Values.Attemps)
+                                            {
+                                                Console.WriteLine(Messages.HabilityUn, userStats[userTurns[i], Values.Hability]);
+                                                tries++;
+                                                action = Convert.ToInt32(Console.ReadLine());
+                                            }
+                                        } while (!Utils.InRangValidation(action, Values.Op1, Values.Op3) && tries < Values.Attemps);
+
+                                        switch (action)
+                                        {
+                                            case 1:
+                                                userMonsterStats[0] -= Utils.Attack(userStats, userMonsterStats, userTurns[i]);
+                                                Console.WriteLine(Messages.MonsterDamage, separatedNames[userTurns[i]], Utils.Attack(userStats, userMonsterStats, userTurns[i]));
+                                                break;
+                                            case 2:
+                                                userStats[userTurns[i], Values.Shield] = Utils.ShieldImprovement(userStats, userTurns[i]);
+                                                Console.WriteLine(Messages.ShieldImprove, separatedNames[userTurns[i]], userStats[userTurns[i], Values.Shield]);
+                                                break;
+                                            case 3:
+                                                if (Utils.InRangValidation(userStats[userTurns[i], Values.Hability]))
+                                                {
+                                                    switch (userStats[userTurns[i], 0])
+                                                    {
+                                                        case Values.Archer:
+                                                            userStats[userTurns[i], Values.Hability]--;
+                                                            break;
+                                                        case Values.Barbarian:
+                                                            if (userStats[userTurns[i], Values.Shield] != Values.MegaShield)
+                                                            {
+                                                                userStats[userTurns[i], Values.Shield] = Values.MegaShield;
+                                                                userStats[userTurns[i], Values.Hability]--;
+                                                            }
+                                                            break;
+                                                        case Values.Magician:
+                                                            userMonsterStats[0] -= Values.Attemps * Utils.Attack(userStats, userMonsterStats, userTurns[i]);
+                                                            break;
+                                                        case Values.Druid:
+                                                            for (int j = 0; j < userStats.GetLength(0); i++)
+                                                            {
+                                                                switch (userStats[j, 0])
+                                                                {
+                                                                    case 0:
+                                                                        userStats[j, Values.Health] = Utils.Heal(userStats[j, Values.Health], Values.ArcherHealthMax);
+                                                                        break;
+                                                                    case 1:
+                                                                        userStats[j, Values.Health] = Utils.Heal(userStats[j, Values.Health], Values.BarbarianHealthMax);
+                                                                        break;
+                                                                    case 2:
+                                                                        userStats[j, Values.Health] = Utils.Heal(userStats[j, Values.Health], Values.MagicianHealthMax);
+                                                                        break;
+                                                                    case 3:
+                                                                        userStats[j, Values.Health] = Utils.Heal(userStats[j, Values.Health], Values.DruidHealthMax);
+                                                                        break;
+                                                                }
+                                                            }
+                                                            break;
+                                                    }
+                                                    Console.WriteLine(Messages.UseHability, separatedNames[userTurns[i]]);
+                                                }
+                                                else Console.WriteLine(Messages.ErrorBattleOption);
+                                                break;
+                                            default:
+                                                Console.WriteLine(Messages.ErrorBattleOption);
+                                                break;
+                                        }
+                                        Console.ReadKey();
+                                        Console.Clear();
+                                        Utils.PrintRound(separatedNames, userStats, userMonsterStats);
+                                    }
+                                }
+
+                                for (int i = 0; i < userStats.GetLength(0); i++)
+                                {
+
+                                    userStats[i, Values.Health] -= Utils.Attack(userStats, userMonsterStats[3], i);
+                                    Console.WriteLine(Messages.MonsterAction, separatedNames[userStats[i, 0]], userStats[i, Values.Health]);
+                                }
+
+
+                                for (int i = 0; i < userStats.GetLength(0); i++)
+                                {
+                                    Utils.HabilitiesBalance(userStats[i, Values.Hability], Values.Cooldown);
+                                }
+                                userMonsterStats[3] = Utils.HabilitiesBalance(userMonsterStats[3], Values.KnockOut);
+                            } while ((userStats[Values.Archer, Values.Health] > 0 ||
+                                      userStats[Values.Barbarian, Values.Health] > 0 ||
+                                      userStats[Values.Magician, Values.Health] > 0 ||
+                                      userStats[Values.Druid, Values.Health] > 0) && userMonsterStats[0] > 0);
+                            if (userMonsterStats[0] <= 0)
+                                Console.WriteLine(Messages.Win);
+                            else
+                                Console.WriteLine(Messages.Defeat);
                             break;
                         case 4:
 
